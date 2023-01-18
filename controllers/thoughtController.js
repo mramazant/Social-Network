@@ -1,11 +1,13 @@
-const { ObjectId } = require("mongoose").Types;
 const { User, Thought } = require("../models");
 // *****************all of the page**************
 const thoughtController = {
   createThought(req, res) {
     Thought.create(req.body)
-      .then((thought) => res.json(thought))
-      .catch((err) => res.status(500).json(err));
+      .then((thought) => {
+        console.log(JSON.stringify(thought));
+        res.send({ text: JSON.stringify(thought) });
+      })
+      .catch((err) => res.status(500).send(err));
   },
   getThought(req, res) {
     Thought.find()
@@ -23,7 +25,7 @@ const thoughtController = {
       .catch((err) => res.status(500).json(err));
   },
   deleteThought(req, res) {
-    User.findOneAndDelete({ _id: req.params.thoughtId })
+    Thought.findOneAndDelete({ _id: req.params.thoughtId })
       .then((thought) =>
         !user
           ? res.status(404).json({ message: "No thought with that ID" })
